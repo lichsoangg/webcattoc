@@ -8,6 +8,7 @@ use App\Http\Requests\Client\Registerrequest as ClientRegisterrequest;
 use App\Mail\registerMail;
 use App\Models\client;
 use App\Models\combo;
+use App\Models\lichcat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Mailable;
@@ -33,8 +34,9 @@ class ClientController extends Controller
     {
         $user_id = Auth::user()->id;
         $data = User::where('id', $user_id)->get();
+        $data1 = lichcat::where('user_id', $user_id)->get();
 
-        return view('client.page.profile', compact('data'));
+        return view('client.page.profile', compact('data', 'data1'));
     }
 
     /**

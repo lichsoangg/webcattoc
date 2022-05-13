@@ -26,10 +26,9 @@
               </ul>
             </li>
             <li class="sidebar-list">
-                <label class="badge badge-danger"></label><a class="sidebar-link sidebar-title" href="#"><i data-feather="box"></i><span>Chấm Công</span></a>
+                <label class="badge badge-danger"></label><a class="sidebar-link sidebar-title" href="#"><i data-feather="box"></i><span>Danh sách lịch cắt tóc</span></a>
                 <ul class="sidebar-submenu">
-                  <li><a href="">Bảng Chấm Công</a></li>
-                  <li><a href="">Bảng Lương</a></li>
+                  <li><a href="/admin/lichcat">Lịch Cắt</a></li>
                 </ul>
               </li>
             {{-- <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="file-manager.html"><i data-feather="git-pull-request"> </i><span>File manager</span></a></li>

@@ -15,6 +15,11 @@ class CreateLichcatsTable extends Migration
     {
         Schema::create('lichcats', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
+            $table->string('combo_id');
+            $table->string('gia_id');
+            $table->date('ngaycat');
+            $table->time('giocat');
             $table->timestamps();
         });
     }

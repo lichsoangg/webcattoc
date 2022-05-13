@@ -13,7 +13,7 @@ $user = Auth::user();
                     <figure class="category--img4">
                         <img src="img/hinhnen1.png" alt="">
                         <figcaption class="overlay-bg">
-                            <a href="" data-toggle="modal" data-target="#signup_modal1" class="cat-box">
+                            <a href="" data-toggle="modal" data-gd={{$value->giatien}} data-id={{$value->tencombo}} data-target="#signup_modal1" class="cat-box callDelete">
                                 <div>
                                     <div class="icon">
                                         <span class="la la-scissors"></span>
@@ -41,16 +41,18 @@ $user = Auth::user();
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="user_id" {{$user->id}}>
+                    <input type="hidden" id="user_id" value="{{$user->id}}">
+                    <input type="hidden" id="combo_id" >
+                    <input type="hidden" id="gia_id" >
                     <h5>Nhập ngày</h5>
                     <br>
                         <input type="date" id="ngaycat" class="form-control" placeholder="Ngày cắt" required>
                         <br>
-                        <h5>Nhập giờ</h5>
+                        <h5>Nhập giờ (vui lòng chọn từ 8:00 SA đến 7:00 CH)</h5>
                     <br>
-                        <input type="time" id="goicat" min="09:00" max="18:00" class="form-control" placeholder="Ngày cắt" required>
+                        <input type="time" id="giocat" class="form-control" required>
                         <br>
-                        <button type="submit" class="btn btn-block btn-lg btn-gradient btn-gradient-two" id="dangky">Đặt Ngay</button>
+                        <button type="submit" class="btn btn-block btn-lg btn-gradient btn-gradient-two" id="datlich">Đặt Ngay</button>
                 </div>
             </div>
         </div>
@@ -86,4 +88,48 @@ $user = Auth::user();
     </div>
 </div>
 @endif
+@endsection
+@section('js')
+
+    <script>
+         $(document).ready(function(){
+            $(".callDelete").click(function(){
+                var id = $(this).data('id');
+                var gd = $(this).data('gd');
+                console.log(id);
+                row = $(this);
+                $("#combo_id").val(id);
+                $("#gia_id").val(gd);
+                });
+            $('#datlich').click(function(e){
+            var ngaycat        = $("#ngaycat").val();
+            var giocat     = $("#giocat").val();
+            var user_id  = $("#user_id").val();
+            var combo_id  = $("#combo_id").val();
+            var gia_id  = $("#gia_id").val();
+            var data = {
+                'ngaycat'    : ngaycat,
+                'giocat'    : giocat,
+                'user_id'    : user_id,
+                'combo_id'    : combo_id,
+                'gia_id'    : gia_id,
+        };
+        $.ajax({
+                url : '/client/datlich',
+                type: 'post',
+                data: data,
+                success: function($xxx){
+                    toastr.success('Bạn đã đặt lịch thành công !');
+                    location.reload();
+                },
+                error: function($errors){
+                    var listErrors = $errors.responseJSON.errors;
+                    $.each(listErrors, function(key, value) {
+                        toastr.error(value[0]);
+                    });
+                }
+            });
+        });
+        });
+    </script>
 @endsection

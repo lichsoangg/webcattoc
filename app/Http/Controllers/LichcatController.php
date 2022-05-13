@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\datlich\datlichrequest;
 use App\Models\lichcat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LichcatController extends Controller
 {
@@ -12,9 +14,10 @@ class LichcatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function danhsachlichcat()
     {
-        //
+        $lichcat = lichcat::join('users', 'user_id', 'users.id')->select('lichcats.*', 'users.hovaten as tenkhachang')->get();
+        return view('admin.page.lichcat.lichcat', compact('lichcat'));
     }
 
     /**
@@ -33,9 +36,11 @@ class LichcatController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function lichcat(datlichrequest $request)
     {
-        //
+        $data = $request->all();
+        lichcat::create($data);
+        return redirect('/client');
     }
 
     /**
