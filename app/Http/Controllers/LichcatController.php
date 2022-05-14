@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\datlich\datlichrequest;
+use App\Mail\xacnhanMail;
+use App\Models\agent;
 use App\Models\lichcat;
+use App\Models\xacminh;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class LichcatController extends Controller
 {
@@ -16,8 +20,43 @@ class LichcatController extends Controller
      */
     public function danhsachlichcat()
     {
-        $lichcat = lichcat::join('users', 'user_id', 'users.id')->select('lichcats.*', 'users.hovaten as tenkhachang')->get();
-        return view('admin.page.lichcat.lichcat', compact('lichcat'));
+        $lichcat = lichcat::join('users', 'user_id', 'users.id')->select('lichcats.*', 'users.hovaten as tenkhachang', 'users.email as emailkhachhang')->get();
+        $nhanvien = agent::all();
+        return view('admin.page.lichcat.lichcat', compact('lichcat', 'nhanvien'));
+    }
+    public function nhanlich($id)
+    {
+        $xacminh = lichcat::join('users', 'user_id', 'users.id')->select('lichcats.*', 'users.hovaten as tenkhachang', 'users.email as emailkhachhang', 'users.sodienthoai as phonekhachhang')->find($id);
+        if($xacminh){
+            return response()->json(["data" => $xacminh]);
+        }else {
+            toastr()->error("xacminh does not exits");
+            return $this->index();
+        }
+    }
+    public function xacnhan(Request $request)
+    {
+        $dataMail = $request->all();
+        $dataMail['tenkhachang'] = $request->tenkhachang;
+        $dataMail['combo_id'] = $request->combo_id;
+        $dataMail['ngaycat'] = $request->ngaycat;
+        $dataMail['giocat'] = $request->giocat;
+        $dataMail['gia_id'] = $request->gia_id;
+        $dataMail['trangthai'] = $request->trangthai;
+        $dataMail['tennhanvien'] = $request->tennhanvien;
+        xacminh::create($dataMail);
+        Mail::to($request->emailkhachhang)->send(new xacnhanMail($dataMail));
+
+        $id = $request->id;
+        $lichcat = lichcat::find($id);
+        if($lichcat)
+        {
+            $lichcat->id == $id;
+            $lichcat->delete();
+        }else{
+            toastr()->error("Bạn không được sữa hệ thống");
+        }
+        return response()->json(['status' => true]);
     }
 
     /**

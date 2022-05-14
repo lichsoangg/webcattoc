@@ -57,7 +57,7 @@
                   <div class="mb-3">
                     <label>Vị trí</label>
                     <select class="form-select" name="vitri">
-                        <option selected="" disabled="" value="">Chọn</option>
+                    <option selected="" disabled="" value="">Chọn</option>
                       <option value="0">Nhân viên cắt tóc</option>
                       <option value="1">Nhân viên gội đầu</option>
                       <option value="2">Nhân viên thu ngân</option>

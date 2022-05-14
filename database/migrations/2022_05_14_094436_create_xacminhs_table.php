@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLichcatsTable extends Migration
+class CreateXacminhsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,17 @@ class CreateLichcatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('lichcats', function (Blueprint $table) {
+        Schema::create('xacminhs', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->string('tenkhachang');
+            $table->string('emailkhachhang');
             $table->string('combo_id');
             $table->string('gia_id');
             $table->date('ngaycat');
             $table->time('giocat');
-            $table->integer('trangthai')->default(0);
+            $table->integer('trangthai');
+            $table->integer('tennhanvien');
+            $table->string('phonekhachhang');
             $table->timestamps();
         });
     }
@@ -32,6 +35,6 @@ class CreateLichcatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lichcats');
+        Schema::dropIfExists('xacminhs');
     }
 }

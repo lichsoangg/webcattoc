@@ -5,16 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class lichcat extends Model
+class xacminh extends Model
 {
     use HasFactory;
-    protected $table = 'lichcats';
+    protected $table = 'xacminhs';
     protected $fillable = [
-        'user_id',
+        'tenkhachang',
+        'emailkhachhang',
+        'combo_id',
         'ngaycat',
         'giocat',
-        'combo_id',
         'gia_id',
         'trangthai',
+        'tennhanvien',
+        'phonekhachhang',
     ];
 }

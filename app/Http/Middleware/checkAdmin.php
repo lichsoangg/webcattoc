@@ -20,7 +20,7 @@ class checkAdmin
         if(Auth::check()){
             return $next($request);
         } else {
-            toastr()->warning('Bạn cần đăng nhập để vào trang quản trị');
+            toastr()->warning('Bạn cần đăng nhập để tiếp tục !');
             return redirect('/client');
         }
     }

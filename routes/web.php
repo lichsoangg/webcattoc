@@ -36,6 +36,8 @@ Route::get('/quantrivien', function () {
     Route::get('/admin/combo/edit/{id}', [\App\Http\Controllers\ComboController::class, 'edit']);
     Route::post('/admin/combo/capnhap/{id}', [\App\Http\Controllers\ComboController::class, 'update']);
     Route::get('/admin/lichcat', [\App\Http\Controllers\LichcatController::class, 'danhsachlichcat']);
+    Route::get('/admin/lichcat/nhanlich/{id}', [\App\Http\Controllers\LichcatController::class, 'nhanlich']);
+    Route::post('/admin/lichcat/xacnhan/{id}', [\App\Http\Controllers\LichcatController::class, 'xacnhan']);
 
 Route::group(['prefix' => '' , 'middleware' => 'checkAdmin'], function(){
     Route::get('/nguoidung', [\App\Http\Controllers\ClientController::class, 'Viewprofile']);
