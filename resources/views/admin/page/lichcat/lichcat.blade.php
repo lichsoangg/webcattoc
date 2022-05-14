@@ -40,7 +40,7 @@
                                         <td class="text-center">{{ $value->giocat }}</td>
                                         <td class="text-center">{{ $value->combo_id }}</td>
                                         <td class="text-center">{{ number_format($value->gia_id, 0, ',', '.') }} VNĐ</td>
-                                        <td class="text-center">Chưa thanh toán</td>
+                                        <td class="text-center">Đã thanh toán</td>
                                         <td class="text-center text-nowrap">
                                             <button data-delete={{$value->id}} type="button" class="btn btn-success round waves-effect callDelete" type="button" data-bs-toggle="modal" data-bs-target="#addNewCard">Nhận Lịch</button>
                                             <button type="button" data-edit="{{ $value->id }}"
