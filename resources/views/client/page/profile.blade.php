@@ -17,10 +17,12 @@
                 @endforeach
                 @foreach ($data1 as $value1 )
                 <p>Bạn có lịch cắt vào lúc : {{$value1->giocat}} ngày :  {{$value1->ngaycat}}, {{$value1->combo_id}}, {{$value1->gia_id}} VNĐ</p>
+                <p>Nhân viên : {{$value1->tennhanvien}}</p>
                 <p>Trạng thái : <a></i>{{$value1->trangthai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}}</a></p>
+                @if ($value1->trangthai == 0)
                 <p><a data-toggle="modal" data-target="#signup_modal2" href="" class="btn btn-outline-secondary"><i class="fa fa-moneyf"></i>Thanh Toán</a></p>
+                @endif
                 @endforeach
-                {{-- <p> Trạng thái : Chưa thanh toán (Bạn có thể thanh toán tại quầy)</p> --}}
             </div>
         </div>
     </div><!-- ends: .atbd_auhor_profile_area -->

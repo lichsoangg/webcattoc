@@ -10,6 +10,7 @@ use App\Models\client;
 use App\Models\combo;
 use App\Models\lichcat;
 use App\Models\User;
+use App\Models\xacminh;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
@@ -32,9 +33,9 @@ class ClientController extends Controller
     }
     public function Viewprofile(request $request)
     {
-        $user_id = Auth::user()->id;
-        $data = User::where('id', $user_id)->get();
-        $data1 = lichcat::where('user_id', $user_id)->get();
+        $user_id = Auth::user()->email;
+        $data = User::where('email', $user_id)->get();
+        $data1 = xacminh::where('emailkhachhang', $user_id)->get();
 
         return view('client.page.profile', compact('data', 'data1'));
     }

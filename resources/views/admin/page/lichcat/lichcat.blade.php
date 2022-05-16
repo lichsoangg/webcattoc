@@ -43,14 +43,11 @@
                                         <td class="text-center">{{ $value->combo_id }}</td>
                                         <td class="text-center">{{ number_format($value->gia_id, 0, ',', '.') }} VNĐ</td>
                                         <td class="text-center">{{ $value->trangthai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</td>
-                                        {{-- <td class="text-center">
-                                            <span class="btn view {{$value->trangthai == 0 ? 'btn btn-outline-success btn-sm' : 'btn btn-outline-danger btn-sm'}}" data-id="{{$value->id}}">{{ $value->trangthai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }} </span>
-                                        </td> --}}
                                         <td class="text-center text-nowrap">
                                             <button data-id={{$value->id}} type="button" class="btn btn-success round waves-effect nhanlich" type="button" data-bs-toggle="modal" data-bs-target="#nhanlichmodel">Nhận Lịch</button>
-                                            <button type="button" data-edit="{{ $value->id }}"
-                                                class="btn btn-danger ChinhSuaCombo" data-bs-toggle="modal"
-                                                data-bs-target="#chinhsuacombo">
+                                            <button type="button" data-huy="{{ $value->id }}"
+                                                class="btn btn-danger huylich" data-bs-toggle="modal"
+                                                data-bs-target="#huylich">
                                                 Hủy Lịch
                                             </button>
                                         </td>
@@ -91,22 +88,51 @@
                             <input type="text" id="gia_id" class="form-control" readonly>
                             <h6>Trạng thái</h6>
                             <select class="form-select" id="trangthai">
+                                <option selected="" disabled="" value="">Vui lòng chọn trạng thái</option>
                                 <option value="0">Chưa thanh toán</option>
                                 <option value="1">Đã thanh toán</option>
                             </select>
                             <h6>Nhân Viên Cắt</h6>
-                            @foreach ($nhanvien as $key => $value)
                             <select class="form-select" id="tennhanvien">
                                 <option selected="" disabled="" value="">Vui lòng chọn nhân viên</option>
-                                  <option value="{{$value->id}}">{{$value->hovaten}}</option>
+                                @foreach ($nhanvien as $key => $value)
+                                  <option value="{{$value->hovaten}}">{{$value->hovaten}}</option>
+                                  @endforeach
                                 </select>
-                            @endforeach
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Không</button>
                     <button class="btn btn-success" id="xacnhan" type="button">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="huylich" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Gửi thông báo khách hàng</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <input type="hidden" id="huy_id">
+                            <h6>Tên khách hàng</h6>
+                            <input type="text" id="tenkhachang1" class="form-control" readonly>
+                            <h6>Email khách hàng</h6>
+                            <input type="text" id="emailkhachhang1" class="form-control" readonly>
+                            <h6>Lý do hủy lịch</h6>
+                            <input type="text" id="lydo" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Không</button>
+                    <button class="btn btn-success" id="xacnhanhuy" type="button">Xác nhận hủy</button>
                 </div>
             </div>
         </div>
@@ -122,6 +148,44 @@
     </script>
     <script>
         $(document).ready(function() {
+            $(".huylich").click(function(e) {
+                var id = $(this).data('huy');
+                $("#huy_id").val(id);
+                e.preventDefault();
+                $.ajax({
+                    url: '/admin/lichcat/huylich/' + id,
+                    type: 'get',
+                    success: function(response) {
+                        $('#tenkhachang1').val(response.data.tenkhachang1);
+                        $('#emailkhachhang1').val(response.data.emailkhachhang1);
+                    }
+                });
+                $("#xacnhanhuy").click(function(){
+                    var huylich = {
+                        'tenkhachang1'              :   $('#tenkhachang1').val(),
+                        'emailkhachhang1'               :   $('#emailkhachhang1').val(),
+                        'lydo'                :    $('#lydo').val(),
+
+                    };
+                    $.ajax({
+                            url : '/admin/lichcat/xacnhanhuy/' + id,
+                            type: 'post',
+                            data: huylich,
+                            success: function($xxx){
+                                if($xxx.status == true){
+                                    toastr.success("Bạn đã gửi thông tin thành công !");
+                                }
+                                location.reload();
+                            },
+                            error: function($errors){
+                                var listErrors = $errors.responseJSON.errors;
+                                $.each(listErrors, function(key, value) {
+                                    toastr.error(value[0]);
+                                });
+                            }
+                        });
+                });
+            });
             $(".nhanlich").click(function(e) {
 
                 var id = $(this).data('id');
@@ -144,8 +208,6 @@
                     }
 
                 });
-
-
             $("#xacnhan").click(function(){
                         var payload1 = {
                         'tenkhachang'              :   $('#tenkhachang').val(),
@@ -175,27 +237,9 @@
                                 });
                             }
                         });
-                      });
-                    });
-                $(".callDelete").click(function(){
-                var id = $(this).data('delete');
-                console.log(id);
-                row = $(this);
-                $("#nhavien_id").val(id);
-                });
-                $("#xoanhanvien").click(function(){
-                    var id = $("#nhavien_id").val();
-                    $.ajax({
-                        url: '/admin/agent/xoanhanvien/' + id,
-                        type: 'get',
-                        success: function($data) {
-                            toastr.success('Bạn đã xóa thành công nhân viên !');
-                            $(row).closest('tr').remove();
-                            $('#addNewCard').modal('hide');
-                        }
-                    });
-                });
 
-        });
+                      });
+                });
+            });
     </script>
 @endsection

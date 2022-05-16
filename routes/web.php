@@ -38,6 +38,12 @@ Route::get('/quantrivien', function () {
     Route::get('/admin/lichcat', [\App\Http\Controllers\LichcatController::class, 'danhsachlichcat']);
     Route::get('/admin/lichcat/nhanlich/{id}', [\App\Http\Controllers\LichcatController::class, 'nhanlich']);
     Route::post('/admin/lichcat/xacnhan/{id}', [\App\Http\Controllers\LichcatController::class, 'xacnhan']);
+    Route::get('/admin/lichcatdaxuly', [\App\Http\Controllers\LichcatController::class, 'lichcatdaxuly']);
+    Route::get('/admin/lichcat/huylich/{id}', [\App\Http\Controllers\LichcatController::class, 'huylich']);
+    Route::post('/admin/lichcat/xacnhanhuy/{id}', [\App\Http\Controllers\LichcatController::class, 'xacnhanhuy']);
+    Route::post('/admin/thanhtoan', [\App\Http\Controllers\LichcatController::class, 'thanhtoan']);
+    Route::get('/admin/xacnhanhangthanh/{id}', [\App\Http\Controllers\LichcatController::class, 'xacnhanhangthanh']);
+
 
 Route::group(['prefix' => '' , 'middleware' => 'checkAdmin'], function(){
     Route::get('/nguoidung', [\App\Http\Controllers\ClientController::class, 'Viewprofile']);

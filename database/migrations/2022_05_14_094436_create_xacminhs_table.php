@@ -22,7 +22,7 @@ class CreateXacminhsTable extends Migration
             $table->date('ngaycat');
             $table->time('giocat');
             $table->integer('trangthai');
-            $table->integer('tennhanvien');
+            $table->string('tennhanvien');
             $table->string('phonekhachhang');
             $table->timestamps();
         });
