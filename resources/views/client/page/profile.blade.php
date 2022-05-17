@@ -22,6 +22,7 @@
                 @if ($value1->trangthai == 0)
                 <p><a data-toggle="modal" data-target="#signup_modal2" href="" class="btn btn-outline-secondary"><i class="fa fa-moneyf"></i>Thanh Toán</a></p>
                 @endif
+                <p><a data-id="{{$value1->id}}" data-toggle="modal" data-target="#signup_modal3" href="" class="btn btn-outline-danger callDelete"><i class="fa fa-moneyf"></i>Hủy Lịch</a></p>
                 @endforeach
             </div>
         </div>
@@ -58,5 +59,57 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="signup_modal3" tabindex="-1" role="dialog" aria-labelledby="signup_modal_label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signup_modal_label"><i class="la la-lock"></i> Bạn có muốn hủy lịch ?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <h5 class="text-center">Vui lòng xác nhận</h5>
+                <br>
+                <input type="hidden" id="xacnhan_id">
+                <div  class="text-center">
+                    <button class="btn btn-danger" id="xacnhanhangthanh" type="button">Xác nhận</button>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
 @endif
+@endsection
+@section('js')
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $(".callDelete").click(function(){
+            var id = $(this).data('id');
+            console.log(id);
+            row = $(this);
+            $("#xacnhan_id").val(id);
+            });
+            $("#xacnhanhangthanh").click(function(){
+                var id = $("#xacnhan_id").val();
+                $.ajax({
+                    url: '/admin/xacnhanhangthanh/' + id,
+                    type: 'get',
+                    success: function($data) {
+                        toastr.success('Bạn đã hủy lịch thành công !');
+                        $(row).closest('tr').remove();
+                        location.reload();
+                    }
+                });
+            });
+    });
+</script>
 @endsection
